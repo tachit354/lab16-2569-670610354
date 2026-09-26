@@ -5,13 +5,12 @@ import {
   courses as initialCourses,
   enrollments as initialEnrollments,
 } from "@/lib/mock-data";
-import type { Course, Student, Enrollment } from "@/lib/types";
+import type { Course, Student} from "@/lib/types";
 import { persist } from "zustand/middleware";
 
 type EnrollmentStore = {
   students: Student[];
   courses: Course[];
-  enrollments: Enrollment[]
   /** Admin ลงทะเบียนวิชาให้นักศึกษาคนใดก็ได้ (ไม่ซ้ำกับที่มีอยู่แล้ว) */
   enroll: (studentId: string, courseId: string) => void;
   /** Admin ยกเลิกการลงทะเบียนของนักศึกษาคนใดก็ได้ */
@@ -114,7 +113,6 @@ persist(
       partialize: (state) => ({
         students: state.students,
         courses: state.courses,
-        enrollments: state.enrollments,
       }),
     },
   ),
