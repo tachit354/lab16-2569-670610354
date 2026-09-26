@@ -13,14 +13,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-
 import {
   Table,
   TableBody,
@@ -48,41 +40,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useEnrollmentStore } from "@/lib/enrollment-store";
 
-// type Option = { value: string; label: string };
-
-// function OptionSelect({
-//   id,
-//   options,
-//   value,
-//   onChange,
-//   placeholder,
-// }: {
-//   id: string;
-//   options: Option[];
-//   value: string | null;
-//   onChange: (value: string) => void;
-//   placeholder?: string;
-// }) {
-//   return (
-//     <Select
-//       items={options}
-//       value={value}
-//       onValueChange={(v) => onChange(v as string)}
-//     >
-//       <SelectTrigger id={id} className="w-full">
-//         <SelectValue placeholder={placeholder} />
-//       </SelectTrigger>
-//       <SelectContent>
-//         {options.map((o) => (
-//           <SelectItem key={o.value} value={o.value}>
-//             {o.label}
-//           </SelectItem>
-//         ))}
-//       </SelectContent>
-//     </Select>
-//   );
-// }
-
 export default function AdminCoursesPage() {
   const { courses, addCourse, removeInstructor, removeCourse } =
     useEnrollmentStore();
@@ -99,9 +56,6 @@ export default function AdminCoursesPage() {
   const [NameCourse, setNameCourse] = useState<string>("");
   const [instructorInput, setInstructorInput] = useState("");
   const [enrollDialogOpen, setEnrollDialogOpen] = useState(false);
-  // const [mode] = useState<"course" | "student">("course");
-  const [filterCourse] = useState("all");
-  const [filterStudent] = useState("all");
 
   const confirmDeleteCourse = () => {
     if (courseToDelete) {
@@ -157,15 +111,6 @@ export default function AdminCoursesPage() {
       setSelectedInstructor([]);
     }
   };
-
-  // const rows = enrollments.filter((e) =>
-  //   mode === "course"
-  //     ? filterCourse === "all" || e.courseId === filterCourse
-  //     : filterStudent === "all" || e.studentId === filterStudent,
-  // );
-
-  // const titleOf = (courseId: string) =>
-  //   courses.find((c) => c.courseCode === courseId)?.courseTitle ?? "-";
 
   return (
     <div className="space-y-4">
