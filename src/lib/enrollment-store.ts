@@ -6,6 +6,7 @@ import {
   enrollments as initialEnrollments,
 } from "@/lib/mock-data";
 import type { Course, Student, Enrollment } from "@/lib/types";
+import { persist } from "zustand/middleware";
 
 type EnrollmentStore = {
   students: Student[];
@@ -15,13 +16,20 @@ type EnrollmentStore = {
   enroll: (studentId: string, courseId: string) => void;
   /** Admin ยกเลิกการลงทะเบียนของนักศึกษาคนใดก็ได้ */
   drop: (studentId: string, courseId: string) => void;
+  /** เพิ่มวิชาใหม่ */
+  addCourse: (course: Course) => void;
+  /**ลบผู้สอน */
+  removeInstructor: (courseCode: string, instructorName: string) => void;
   /** ลบนักศึกษา พร้อมการลงทะเบียนทั้งหมดของคนนั้น */
   removeStudent: (studentId: string) => void;
   /** ลบวิชาออกจากรายวิชาที่เปิดสอน พร้อม cascade ลบ enrollment ที่อ้างถึงวิชานั้นทั้งหมด */
   removeCourse: (courseId: string) => void;
 };
 
-export const useEnrollmentStore = create<EnrollmentStore>((set) => ({
+export const useEnrollmentStore = create<EnrollmentStore>()(
+
+persist(
+    (set) => ({
   students: initialStudents,
   courses: initialCourses,
   enrollments: initialEnrollments,
@@ -57,6 +65,24 @@ export const useEnrollmentStore = create<EnrollmentStore>((set) => ({
       }),
     })),
 
+  addCourse: (newCourse) =>
+        set((state) => ({
+          courses: [...state.courses, newCourse],
+        })),  
+  
+  removeInstructor: (courseCode, instructorName) =>
+        set((state) => ({
+          courses: state.courses.map((course) => {
+          if (course.courseCode === courseCode) {
+          return {
+            ...course,
+            instructors: course.instructors?.filter((t) => t !== instructorName),
+          };
+        }
+        return course;
+        }),
+      })),
+
   removeStudent: (studentId) =>
     set((state) => ({
       students: state.students.filter((s) => s.studentId !== studentId),
@@ -82,4 +108,15 @@ export const useEnrollmentStore = create<EnrollmentStore>((set) => ({
     //   enrollments: state.enrollments.filter((e) => e.courseId !== courseId),
     // })),
     
-}));
+}),
+    {
+      name: "lab16-2569-670610354",
+      partialize: (state) => ({
+        students: state.students,
+        courses: state.courses,
+        enrollments: state.enrollments,
+      }),
+    },
+  ),
+
+);
